@@ -23,7 +23,8 @@ class sensor_messurement(object):
 
                 
         
-base_url = "http://homemonitorweb.azurewebsites.net"
+#base_url = "http://homemonitorweb.azurewebsites.net"
+base_url = "http://localhost:"
 controller = "/api/sensorconfigurations"
     
 def get_sensor_configuration():
@@ -46,7 +47,7 @@ def get_sensor_configuration():
     return configurations
 
 def save_sensor_reading(id, value):
-    result = requests.put(base_url + controller + '/{}'.format(id), value.)
+    result = requests.put(base_url + controller + '/{}'.format(id), "{}".format(value))
 
     if not result.ok:
         print ('Response is not ok')

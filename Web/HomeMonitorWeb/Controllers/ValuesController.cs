@@ -6,6 +6,10 @@ namespace HomeMonitorWeb.Controllers
     [Route("api/[controller]")]
     public class ValuesController : Controller
     {
+        public ValuesController()
+        {
+
+        }
         // GET api/values
         [HttpGet]
         public IEnumerable<string> Get()
