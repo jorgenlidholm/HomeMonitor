@@ -2,8 +2,8 @@
 
 
 # Web
-import requests
 import json
+import requests
 
 class sensor_configuration(object):
     id = 0,
@@ -21,12 +21,10 @@ class sensor_messurement(object):
         self.id = id
         self.temperature = temperature
 
-                
-        
 #base_url = "http://homemonitorweb.azurewebsites.net"
-base_url = "http://localhost:"
+base_url = "http://localhost:51895"
 controller = "/api/sensorconfigurations"
-    
+
 def get_sensor_configuration():
     response = requests.get(base_url+controller)
 
@@ -35,7 +33,7 @@ def get_sensor_configuration():
         return
 
     if not response.headers.get('content-type').__contains__('application/json'):
-        print ('Wrong content type {}'.format(response.headers.get('content-type')))
+        print('Wrong content type {}'.format(response.headers.get('content-type')))
         return
 
     configurations = []
@@ -46,12 +44,9 @@ def get_sensor_configuration():
 
     return configurations
 
-def save_sensor_reading(id, value):
-    result = requests.put(base_url + controller + '/{}'.format(id), "{}".format(value))
+def save_sensor_reading(sensorid, value):
+    query = base_url + controller + '/{}'.format(sensorid)
+    result = requests.put(query, data={"value":'{}'.format(value)})
 
     if not result.ok:
-        print ('Response is not ok')
-
-        
-    
-    
+        print('Response is not ok')
