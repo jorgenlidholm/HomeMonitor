@@ -4,54 +4,58 @@ import argparse
 import sys
 import time
 
-import tellcore.telldus as td
-import tellcore.constants as const
+# import tellcore.telldus as td
+# import tellcore.constants as const
+
+import TellStick as tellstick_module
 
 # Web
 import HomeMonitorWebApi as web
 
-if sys.version_info < (3, 0):
-    import tellcore.library as lib
-    lib.Library.DECODE_STRINGS = False
+CONFIGS = web.get_sensor_configuration()
+for config in CONFIGS:
+    print("{} {}".format(config.identity, config.location))
 
-def print_devices(devices):
-    print("Number of devices: {}\n".format(len(devices)))
-    print("{:<5s} {:<25s} {:<10s} {:<20s} {}".format(
-        "ID", "NAME", "STATE", "PROTOCOL", "MODEL", "PARAMTERS"))
-    for device in devices:
-        params_str = ""
-        for name, value in device.parameters().items():
-            params_str += " {}:{}".format(name, value)
-            
-        print("{:<5d} {:<25s} {:<10s} {:<20s}{}".format(
-                device.id, device.name,
-                device.protocol, device.model, params_str))
+tellstick = tellstick_module.Tellstick()
 
-def print_sensors(sensors):
-    print("Number of devices: {}\n".format(len(sensors)))
+## Main
+try:
+    T1 = tellstick_module.TandLyset(1, tellstick)
+    T2 = tellstick_module.ReadSensorData(tellstick)
+    T1.start()
+    T2.start()
+except:
+    print("Error unable to start thread")
 
-    for sensor in sensors:
-        if sensor.has_value(const.TELLSTICK_TEMPERATURE) and sensor.has_value(const.TELLSTICK_HUMIDITY):
-            print("Id: {} Temp: {}".format(sensor.id, sensor.value(const.TELLSTICK_TEMPERATURE).value))
+tellstick.run_loop()
 
-                  
-                            
-    
-
-def load_devices_from_file(filename):
-    print("Loading devices from file")
-
-core = td.TelldusCore()
-
-print_sensors(core.sensors())
+# web.save_sensor_reading(id, 23.3)
 
 
 
-configs = web.get_sensor_configuration()
-for config in configs:
-    print ("{} {}".format(config.id, config.location))
 
+# if sys.version_info < (3, 0):
+#     import tellcore.library as lib
+#     lib.Library.DECODE_STRINGS = False
 
-web.save_sensor_reading(id, 23.3)
+# def print_devices(devices):
+#     print("Number of devices: {}\n".format(len(devices)))
+#     print("{:<5s} {:<25s} {:<10s} {:<20s} {}".format(
+#         "ID", "NAME", "STATE", "PROTOCOL", "MODEL", "PARAMTERS"))
+#     for device in devices:
+#         params_str = ""
+#         for name, value in device.parameters().items():
+#             params_str += " {}:{}".format(name, value)
+
+#         print("{:<5d} {:<25s} {:<10s} {:<20s}{}".format(device.id, device.name, \
+#                 device.protocol, device.model, params_str))
+
+# def print_sensors(sensors):
+#     print("Number of devices: {}\n".format(len(sensors)))
+
+#     for sensor in sensors:
+#         if sensor.has_value(const.TELLSTICK_TEMPERATURE) \
+#             and sensor.has_value(const.TELLSTICK_HUMIDITY):
+#             print("Id: {} Temp: {}".format(sensor.id, sensor.value(const.TELLSTICK_TEMPERATURE).value))
 
 

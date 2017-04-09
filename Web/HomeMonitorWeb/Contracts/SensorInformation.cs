@@ -7,12 +7,12 @@ namespace HomeMonitorWeb.Contracts
 {
     public class SensorInformation
     {
-        public SensorInformation(int id, string location)
+        public SensorInformation(int identity, string location)
         {
-            Id = id;
+            Identity = identity;
             Location = location;
         }
-        public int Id { get; }
+        public int Identity { get; }
 
         public string Location { get; }
     }

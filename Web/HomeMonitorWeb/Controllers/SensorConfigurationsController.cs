@@ -7,9 +7,14 @@ using System.Threading.Tasks;
 
 namespace HomeMonitorWeb.Controllers
 {
+    [Produces("application/json")]
     [Route("api/[controller]")]
     public class SensorConfigurationsController : Controller
     {
+        public SensorConfigurationsController()
+        {
+
+        }
         // PUT api/SensorConfigurations
         [HttpGet]
         public IEnumerable<SensorInformation> GetAll()
