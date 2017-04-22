@@ -79,6 +79,8 @@ class ReadSensorData(threading.Thread):
                     web.save_sensor_readings(results[1])
 
             except Exception as e:
+                import traceback as tb
+                tb.print_tb()
                 print("oops in readSensorData! {}".format(e))
                 time.sleep(10)
                 continue
