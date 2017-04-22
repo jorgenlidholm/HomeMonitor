@@ -18,10 +18,6 @@ namespace HomeMonitorWeb.Storage
         {
             var connectionString = configuration.Value.StorageConnectionString;
             CloudStorageAccount storageAccount = CloudStorageAccount.Parse(connectionString);
-            //CloudStorageAccount storageAccount = new CloudStorageAccount(
-            //    new Microsoft.WindowsAzure.Storage.Auth.StorageCredentials(
-            //    "homemonitorstorage",
-            //    "2EUmT/vTMo4hdcp8nXHlnqjUTAzJRNB3IslPqbSKqDjK8EH8CT5t32fHjpkc0hB5eVyexS/D0EBXg4i12D39yg=="), true);
 
             CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
             _table = tableClient.GetTableReference("SensorMessurement");
