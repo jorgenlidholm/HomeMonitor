@@ -79,8 +79,8 @@ class ReadSensorData(threading.Thread):
                 if any(results):
                     web.save_sensor_readings(results[1])
 
-            except:
-                print("{}".format('oops in readSensorData!'))
+            except Exception as e:
+                print("oops in readSensorData! {}".format(e))
                 time.sleep(10)
                 continue
 
