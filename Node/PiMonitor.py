@@ -1,18 +1,13 @@
 #!/usr/bin/env python
+"""Main module for monitoring sensors"""
 
-# import argparse
-# import sys
-# import time
-
-# import tellcore.telldus as td
-# import tellcore.constants as const
 import threading
 import time
 import datetime
 
 import TellStick as tellstick_module
 
-import SunSettingService
+# import SunSettingService
 # Web
 import HomeMonitorWebApi as web
 
@@ -25,32 +20,32 @@ TELLSTICK = tellstick_module.Tellstick()
 
 
 
-class TandLyset(threading.Thread):
-    """Thread that turns light on"""
-    light_is_lit = False
+# class TandLyset(threading.Thread):
+#     """Thread that turns light on"""
+#     light_is_lit = False
 
-    def __init__(self, thread_id, tellstick):
-        threading.Thread.__init__(self)
-        self.thread_id = thread_id
-        self.tellstick = tellstick
+#     def __init__(self, thread_id, tellstick):
+#         threading.Thread.__init__(self)
+#         self.thread_id = thread_id
+#         self.tellstick = tellstick
 
-    def run(self):
-        while True:
-            time.sleep(60)
-            try:
-                sunset = SunSettingService.get_sunset_for_today()
-                is_after_sunset = sunset < (datetime.datetime.now() - datetime.time.minute(40))
-                is_night_time = datetime.datetime.now().time > datetime.time.hour(23).minute(30)
+#     def run(self):
+#         while True:
+#             time.sleep(60)
+#             try:
+#                 sunset = SunSettingService.get_sunset_for_today()
+#                 is_after_sunset = sunset < (datetime.datetime.now() - datetime.time.minute(40))
+#                 is_night_time = datetime.datetime.now().time > datetime.time.hour(23).minute(30)
 
-                if is_after_sunset and not self.light_is_lit:
-                    self.tellstick.tand_lyset()
-                    self.light_is_lit = True
-                elif is_night_time and self.light_is_lit:
-                    self.tellstick.slack_lyset()
-                    self.light_is_lit = False
+#                 if is_after_sunset and not self.light_is_lit:
+#                     self.tellstick.tand_lyset()
+#                     self.light_is_lit = True
+#                 elif is_night_time and self.light_is_lit:
+#                     self.tellstick.slack_lyset()
+#                     self.light_is_lit = False
 
-            except:
-                print("oops in TandLyset")
+#             except:
+#                 print("oops in TandLyset")
 
 
 class ReadSensorData(threading.Thread):
@@ -86,12 +81,14 @@ class ReadSensorData(threading.Thread):
 
             except:
                 print("{}".format('oops in readSensorData!'))
+                time.sleep(10)
+                continue
 
             time.sleep(60*5)
 
 ## Main
 try:
-    T1 = TandLyset(1, TELLSTICK)
+    # T1 = TandLyset(1, TELLSTICK)
     T2 = ReadSensorData(TELLSTICK)
     # T1.start()
     T2.start()
