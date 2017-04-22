@@ -66,7 +66,8 @@ def get_sensor_configuration():
         return
 
     configurations = []
-    j = json.loads(response.content)
+    # j = json.loads(response.content)
+    j = response.json()
     for item in j:
         print("Adding: {}\n".format(item))
         configurations.append(SensorConfiguration(**item))
