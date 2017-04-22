@@ -11,7 +11,6 @@ import TellStick as tellstick_module
 # Web
 import HomeMonitorWebApi as web
 
-
 # CONFIGS = web.get_sensor_configuration()
 # for config in CONFIGS:
 #     print("{} {}".format(config.identity, config.location))

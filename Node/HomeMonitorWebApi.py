@@ -104,7 +104,7 @@ def get_authentication_token(key):
 
 def get_headers():
     """Get header for authentication"""
-    current_time = datetime.datetime.now().isoformat(timespec='seconds')
+    current_time = datetime.datetime.now().strftime('%Y-%m-%dT%H:%M:%S')
     return {'Content-type': 'application/json', 'Accept': 'text/plain', \
             'X-HomeMonitor-Secret': '{},{}'.format(current_time, \
         	get_authentication_token(current_time))}
