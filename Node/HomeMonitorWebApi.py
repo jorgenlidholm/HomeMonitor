@@ -44,8 +44,8 @@ class SensorMessurement(object):
          'Temperature': float(self.temperature.value), \
          'Humidity': float(self.humidity.value)}
 
-#BASE_URL = "http://homemonitorweb.azurewebsites.net"
-BASEURL = "http://localhost:51895"
+BASEURL = "http://homemonitorweb.azurewebsites.net"
+# BASEURL = "http://localhost:51895"
 SENSORCONFIGROUTE = "/api/sensorconfigurations"
 LIGHTINGCONFIGROUTE = "/api/lightingconfigurations"
 SENSORDATAROUTE = "/api/SensorMessurement"

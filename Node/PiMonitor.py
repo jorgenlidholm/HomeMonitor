@@ -82,12 +82,12 @@ class ReadSensorData(threading.Thread):
                                 humid.timestamp))
 
                 if any(results):
-                    web.save_sensor_readings(results[0])
+                    web.save_sensor_readings(results[1])
 
             except:
                 print("{}".format('oops in readSensorData!'))
 
-            time.sleep(60)
+            time.sleep(60*5)
 
 ## Main
 try:
