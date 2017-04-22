@@ -6,6 +6,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using HomeMonitorWeb.Contracts;
 using HomeMonitorWeb.Validation;
+using System.IO;
+using System.Text;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
+using HomeMonitorWeb.Storage;
 
 namespace HomeMonitorWeb.Controllers
 {
@@ -13,23 +18,38 @@ namespace HomeMonitorWeb.Controllers
     [Route("api/[controller]")]
     public class SensorMessurementController : Controller
     {
-        
+        private IOptions<SensorMessurementOptions> _configuration;
+        private TableStorage _tableStorage;
+
+        public SensorMessurementController(IOptions<SensorMessurementOptions> configuration, TableStorage tableStorage)
+        {
+            _configuration = configuration;
+            _tableStorage = tableStorage;
+        }
+
         // GET: api/SensorMessurement/5
         [HttpGet("{id}")]
-        public SensorMessurement Get(int id)
+        public IEnumerable<SensorMessurement> Get(int id)
         {
-            return new SensorMessurement(1, 23.0f, 33.0f);
+            return _tableStorage.Get(id).Result;
         }
         
         // POST: api/SensorMessurement
         [HttpPost]
         public IActionResult Post([FromBody]SensorMessurement value)
         {
-            if (!RequestValidation.Validate(Request.Headers))
+                if (!RequestValidation.Validate(Request.Headers))
                 return Unauthorized();
+            try
+            {
+                var t1 = Task.Run(() => _tableStorage.Insert(value));
 
-            var measurement = value;
-
+                t1.Wait();
+            }
+            catch (Exception ex)
+            {
+                return new StatusCodeResult(500);
+            }
             return Ok();
         }
         

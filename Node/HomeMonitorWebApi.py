@@ -30,22 +30,35 @@ class SensorMessurement(object):
     identity = 0,
     temperature = 0.0
     humidity = 0.0
+    time = datetime.datetime.now()
 
-    def __init__(self, identity, temperature, humidity):
+    def __init__(self, identity, temperature, humidity, time):
         self.identity = identity
         self.temperature = temperature
         self.humidity = humidity
+        self.time = time
+    def get_measurement(self):
+        """json string"""
+        return {'Identity': self.identity, \
+         'Time': self.time, \
+         'Temperature': float(self.temperature.value), \
+         'Humidity': float(self.humidity.value)}
 
 #BASE_URL = "http://homemonitorweb.azurewebsites.net"
 BASEURL = "http://localhost:51895"
 SENSORCONFIGROUTE = "/api/sensorconfigurations"
 LIGHTINGCONFIGROUTE = "/api/lightingconfigurations"
-SENSORDATAROUTE = "/api/sensordate"
+SENSORDATAROUTE = "/api/SensorMessurement"
 
 def get_sensor_configuration():
     """Reads sensor configuration from web."""
     import requests
-    response = requests.get(BASEURL+SENSORCONFIGROUTE, headers=get_headers())
+    try:
+        response = requests.get(BASEURL+SENSORCONFIGROUTE, headers=get_headers())
+    except ConnectionError as connection_error:
+        print('Connection error occured ' + connection_error.strerror)
+        return [] ## Should log and raise exception
+
 
     if not response.ok:
         print('Response is not ok')
@@ -72,6 +85,17 @@ def save_sensor_reading(sensorid, value):
     if not result.ok:
         print('Response is not ok')
 
+def save_sensor_readings(sensor_measurements):
+    """Saves multiple sensor reading data"""
+    import requests
+    query = BASEURL + SENSORDATAROUTE
+    # headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
+    data = sensor_measurements.get_measurement()
+    result = requests.post(query, data=json.dumps(data), headers=get_headers())
+
+    if not result.ok:
+        print('Unable to store sensor measurments due to: ' + result.text)
+
 def get_authentication_token(key):
     """Creates security token."""
     import hashlib
@@ -84,7 +108,8 @@ def get_authentication_token(key):
 def get_headers():
     """Get header for authentication"""
     current_time = datetime.datetime.now().isoformat(timespec='seconds')
-    return {'X-HomeMonitor-Secret': '{},{}'.format(current_time, \
+    return {'Content-type': 'application/json', 'Accept': 'text/plain', \
+            'X-HomeMonitor-Secret': '{},{}'.format(current_time, \
         	get_authentication_token(current_time))}
 
 

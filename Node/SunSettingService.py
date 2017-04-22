@@ -1,6 +1,6 @@
 """This modules reads sunup and sun down from a webservice if possible."""
 
-import re
+# import re
 import json
 import time
 import datetime as dt
@@ -14,7 +14,7 @@ def utc2local(utc):
 def get_sunset_for_today():
     """Fetches sun rise and sunset time from free api."""
     import requests
-    url = "http://api.sunrise-sunset.org/json?lat=60.5869432&lng=15.6841269&date=today"
+    url = 'http://api.sunrise-sunset.org/json?lat=60.5869432&lng=15.6841269&date=today'
 
     response = requests.get(url)
     if not response.ok:
@@ -22,13 +22,9 @@ def get_sunset_for_today():
 
     data = json.loads(response.text)
 
-    # cdt_uppgang = dt.datetime.combine(dt.datetime.now().date(), \
-    #  dt.datetime.strptime(data['results']['sunrise'], '%I:%M:%S %p').time())
     cdt_nedgang = dt.datetime.combine(dt.datetime.now().date(), \
      dt.datetime.strptime(data['results']['sunset'], '%I:%M:%S %p').time())
-    # soluppgang = utc2local(cdt_uppgang)
     solnedgang = utc2local(cdt_nedgang)
-    #print("Solen går upp {} solen går ner {}".format(soluppgang, solnedgang))
     return solnedgang
 
 def test_method():
