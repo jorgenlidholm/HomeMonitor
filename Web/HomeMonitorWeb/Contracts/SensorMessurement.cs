@@ -21,6 +21,11 @@ namespace HomeMonitorWeb.Contracts
         public long Time { get; }
     }
 
+    public class SensorMessurementArray
+    {
+        public SensorMessurement[] messurments { get; set; }
+    }
+
     public class SensorMessurementEntity : TableEntity
     {
         public SensorMessurementEntity(int identity, long time)

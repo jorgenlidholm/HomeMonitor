@@ -76,7 +76,7 @@ class ReadSensorData(threading.Thread):
                                 humid.timestamp))
 
                 if any(results):
-                    web.save_sensor_readings(results[1])
+                    web.save_sensor_readings(results)
 
             except Exception as ex:
                 import traceback as tb

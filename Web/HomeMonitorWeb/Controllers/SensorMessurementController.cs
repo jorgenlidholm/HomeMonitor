@@ -27,6 +27,12 @@ namespace HomeMonitorWeb.Controllers
             _tableStorage = tableStorage;
         }
 
+        [HttpGet("list")]
+        public IEnumerable<int> GetSensors(int id)
+        {
+            return _tableStorage.GetSensorIds().Result;
+        }
+
         // GET: api/SensorMessurement/5
         [HttpGet("{id}")]
         public IEnumerable<SensorMessurement> Get(int id)
@@ -36,13 +42,14 @@ namespace HomeMonitorWeb.Controllers
         
         // POST: api/SensorMessurement
         [HttpPost]
-        public IActionResult Post([FromBody]SensorMessurement value)
+        public IActionResult Post([FromBody]SensorMessurement[] values)
         {
-                if (!RequestValidation.Validate(Request.Headers))
-                return Unauthorized();
+            if (!RequestValidation.Validate(Request.Headers))
+               return Unauthorized();
+
             try
             {
-                var t1 = Task.Run(() => _tableStorage.Insert(value));
+                var t1 = Task.Run(() => _tableStorage.Insert(values));
 
                 t1.Wait();
             }

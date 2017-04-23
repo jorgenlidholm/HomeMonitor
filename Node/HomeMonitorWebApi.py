@@ -20,8 +20,6 @@ class SensorConfiguration(object):
         """set location of sensor"""
         self.location = location
 
-
-
 class SensorMessurement(object):
     """Sensor messurement object"""
     identity = 0,
@@ -34,6 +32,7 @@ class SensorMessurement(object):
         self.temperature = temperature
         self.humidity = humidity
         self.time = time
+
     def get_measurement(self):
         """json string"""
         return {'Identity': self.identity, \
@@ -41,8 +40,15 @@ class SensorMessurement(object):
          'Temperature': float(self.temperature.value), \
          'Humidity': float(self.humidity.value)}
 
-BASEURL = "http://homemonitorweb.azurewebsites.net"
-# BASEURL = "http://localhost:51895"
+class SensorMessurmentEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, SensorMessurement):
+            return obj.get_measurement()
+        return json.JSONEncoder.default(self,obj)
+
+
+# BASEURL = "http://homemonitorweb.azurewebsites.net"
+BASEURL = "http://localhost:51895"
 SENSORCONFIGROUTE = "/api/sensorconfigurations"
 LIGHTINGCONFIGROUTE = "/api/lightingconfigurations"
 SENSORDATAROUTE = "/api/SensorMessurement"
@@ -87,9 +93,8 @@ def save_sensor_readings(sensor_measurements):
     """Saves multiple sensor reading data"""
     import requests
     query = BASEURL + SENSORDATAROUTE
-    # headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
-    data = sensor_measurements.get_measurement()
-    result = requests.post(query, data=json.dumps(data), headers=get_headers())
+    data = json.dumps(sensor_measurements, cls=SensorMessurmentEncoder)
+    result = requests.post(query, data=data, headers=get_headers())
 
     if not result.ok:
         print('Unable to store sensor measurments due to: ' + result.text)

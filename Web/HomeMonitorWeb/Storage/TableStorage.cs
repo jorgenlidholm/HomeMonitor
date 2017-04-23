@@ -26,6 +26,11 @@ namespace HomeMonitorWeb.Storage
             task.Wait();
         }
 
+        internal async Task<int[]> GetSensorIds()
+        {
+            return new int[]{ 21, 135 };
+        }
+
         public async Task<IEnumerable<SensorMessurement>> Get(int id)
         {
             var operation = new TableQuery<SensorMessurementEntity>()
@@ -48,15 +53,19 @@ namespace HomeMonitorWeb.Storage
             return new SensorMessurement(results.Identity, results.Time, (float) results.Temperature, (float)results.Humidity);
         }
 
-        public async Task Insert(SensorMessurement sensorMessurement)
+        public async Task Insert(IEnumerable<SensorMessurement> sensorMessurements)
         {
-            var operation = TableOperation.Insert(new SensorMessurementEntity(sensorMessurement.Identity, sensorMessurement.Time)
+
+            foreach (var sensorMessurement in sensorMessurements)
             {
-                Temperature = sensorMessurement.Temperature,
-                Humidity = sensorMessurement.Humidity
-            });
-            
-            await _table.ExecuteAsync(operation);
+                var operation = TableOperation.Insert(new SensorMessurementEntity(sensorMessurement.Identity, sensorMessurement.Time)
+                {
+                    Temperature = sensorMessurement.Temperature,
+                    Humidity = sensorMessurement.Humidity
+                });
+
+                await _table.ExecuteAsync(operation);
+            }
         }
     }
 }
