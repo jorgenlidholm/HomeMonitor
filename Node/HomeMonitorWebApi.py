@@ -47,8 +47,8 @@ class SensorMessurmentEncoder(json.JSONEncoder):
         return json.JSONEncoder.default(self,obj)
 
 
-# BASEURL = "http://homemonitorweb.azurewebsites.net"
-BASEURL = "http://localhost:51895"
+BASEURL = "http://homemonitorweb.azurewebsites.net"
+# BASEURL = "http://localhost:51895"
 SENSORCONFIGROUTE = "/api/sensorconfigurations"
 LIGHTINGCONFIGROUTE = "/api/lightingconfigurations"
 SENSORDATAROUTE = "/api/SensorMessurement"
