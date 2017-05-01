@@ -26,6 +26,7 @@ namespace HomeMonitorWeb.Controllers
                 new SensorInformation(1, 11, "Golvvärmecentral"),
                 new SensorInformation(3, 31, "Källare trapphus"),
                 new SensorInformation(4, 41, "Vind, ovan TV rum"),
+                new SensorInformation(5, 51, "Vind, ovan kök"),
             };
         }
 
