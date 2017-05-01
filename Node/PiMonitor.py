@@ -61,19 +61,26 @@ class ReadSensorData(threading.Thread):
             try:
                 results = []
                 configurations = web.get_sensor_configuration()
-
+                sensor_config = None
                 for sensor in self.tellstick.get_sensors():
-                    if any(sensor.id == config.device_id for config in configurations):
-                        has_temp = sensor.has_value(self.const.TELLSTICK_TEMPERATURE)
-                        has_humidity = sensor.has_value(self.const.TELLSTICK_HUMIDITY)
+                    sensor_config = None
+                    for config in configurations:
+                        if sensor.id == config.device_id:
+                            sensor_config = config
+                            break
+                    if sensor_config is None:
+                        continue
 
-                        if has_temp and has_humidity:
-                            temp = sensor.value(self.const.TELLSTICK_TEMPERATURE)
-                            humid = sensor.value(self.const.TELLSTICK_HUMIDITY)
-                            results.append(web.SensorMessurement(sensor.id, \
-                                temp, \
-                                humid, \
-                                humid.timestamp))
+                    has_temp = sensor.has_value(self.const.TELLSTICK_TEMPERATURE)
+                    has_humidity = sensor.has_value(self.const.TELLSTICK_HUMIDITY)
+
+                    if has_temp and has_humidity:
+                        temp = sensor.value(self.const.TELLSTICK_TEMPERATURE)
+                        humid = sensor.value(self.const.TELLSTICK_HUMIDITY)
+                        results.append(web.SensorMessurement(sensor_config.identity, \
+                            temp, \
+                            humid, \
+                            humid.timestamp))
 
                 if any(results):
                     web.save_sensor_readings(results)
