@@ -20,7 +20,7 @@ namespace HomeMonitorWeb.Storage
             CloudStorageAccount storageAccount = CloudStorageAccount.Parse(connectionString);
 
             CloudTableClient tableClient = storageAccount.CreateCloudTableClient();
-            _table = tableClient.GetTableReference("SensorMessurement");
+            _table = tableClient.GetTableReference("SensorMessurement2");
             var task = Task.Run(() => { _table.CreateIfNotExistsAsync(); });
 
             task.Wait();
