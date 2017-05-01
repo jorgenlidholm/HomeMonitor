@@ -21,8 +21,11 @@ namespace HomeMonitorWeb.Controllers
         {
             return new List<SensorInformation>
             {
-                new SensorInformation(21, "Tvättstuga"),
-                new SensorInformation(135, "Matsal")
+                new SensorInformation(21,21,"Tvättstuga"),
+                new SensorInformation(135, 135, "Matsal"),
+                new SensorInformation(1, 11, "Golvvärmecentral"),
+                new SensorInformation(3, 31, "Källare trapphus"),
+                new SensorInformation(4, 41, "Vind, ovan TV rum"),
             };
         }
 
@@ -30,7 +33,7 @@ namespace HomeMonitorWeb.Controllers
         [HttpGet("{id}")]
         public SensorInformation Get(int id)
         {
-            return new SensorInformation(21, "Tvättstuga");
+            return new SensorInformation(21,21, "Tvättstuga");
         }
 
         // PUT api/SensorConfigurations/5

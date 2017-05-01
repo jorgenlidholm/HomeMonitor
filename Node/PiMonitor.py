@@ -65,7 +65,7 @@ class ReadSensorData(threading.Thread):
                 for sensor in self.tellstick.get_sensors():
                     sensor_config = None
                     for config in configurations:
-                        if sensor.id == config.device_id:
+                        if sensor.id == config.deviceId:
                             sensor_config = config
                             break
                     if sensor_config is None:

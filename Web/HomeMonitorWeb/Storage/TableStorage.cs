@@ -36,11 +36,21 @@ namespace HomeMonitorWeb.Storage
             var operation = new TableQuery<SensorMessurementEntity>()
                 .Where(TableQuery.GenerateFilterCondition("PartitionKey", QueryComparisons.Equal, id.ToString()));
 
+            List<SensorMessurementEntity> list = new List<SensorMessurementEntity>();
             var contiunationToken = new TableContinuationToken();
 
-            var task = await _table.ExecuteQuerySegmentedAsync(operation,contiunationToken);
+            do
+            {
+                var task = await _table.ExecuteQuerySegmentedAsync(operation, contiunationToken);
+                if(task.Results != null)
+                    list.AddRange(task.Results);
+                contiunationToken = task.ContinuationToken;
+            }
+            while (contiunationToken != null);
 
-            return Convert(task.Results);
+
+
+            return Convert(list);
         }
 
         private IEnumerable<SensorMessurement> Convert(List<SensorMessurementEntity> results)

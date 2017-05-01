@@ -1,0 +1,80 @@
+
+@{
+    ViewData["Title"] = "Home";
+}
+
+
+
+<environment names="Development">
+        <script data-require="jquery@2.1.1" data-semver="1.9.1" src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.1.6/Chart.bundle.min.js"></script>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $('#get-data').click(function () {
+                    var showData = $('#chart');
+                    $.getJSON('http://homemonitorweb.azurewebsites.net/api/SensorMessurement/21')
+                    //$.getJSON('http://localhost:51895/api/SensorMessurement/21')
+                        .done(function (data) {
+                            //console.log(data);
+
+                            var humidity = data.map(function (item) {
+                                return { x: item.time, y: item.humidity };
+                                //return 'Time: ' + item.time + ' Temp: ' + item.temperature + ' Humid: ' + item.humidity;
+                            });
+                            var temperature = data.map(function (item) {
+                                return { x: item.time, y: item.temperature };
+                                //return 'Time: ' + item.time + ' Temp: ' + item.temperature + ' Humid: ' + item.humidity;
+                            });
+
+                            showData.empty();
+
+                            //if (items.length) {
+                            //    var content = '<li>' + items.join('</li><li>') + '</li>';
+                            //    var list = $('<ul />').html(content);
+                            //    showData.append(list);
+                            //}
+                            var ctx = $('#myChart');
+                            var scatterChartH = new Chart(ctx, {
+                                type: 'line',
+                                data: {
+                                    datasets: [{
+                                            label: 'Humidity',
+                                            borderColor: "rgba(75,192,192,1)",
+                                            data: humidity
+                                        },
+                                        {
+                                            label: 'Temperature',
+                                            borderColor: "rgba(192,75,192,1)",
+                                            data: temperature
+                                        }
+                                    ]
+                                },
+                                options: {
+                                    scales: {
+                                        xAxes: [{
+                                            type: 'linear',
+                                            position: 'bottom'
+                                        }]
+                                    }
+                                }
+                            });
+                            
+                            showData.empty();
+                        })
+                        .fail(function (jqxhr, textStatus, error) {
+                            var err = textStatus + ", " + error;
+                            console.log("Request failed: " + err);
+                        });
+
+                    showData.text('Loading the JSON file.');
+                });
+            });
+        </script>
+</environment>
+
+    <h1>Hello Jörgen!</h1>
+    <a href="#" id="get-data">Hämta data</a>
+    <div id="chart">Hello world</div>
+    <div width="1200px" height="400px">
+        <canvas id="myChart" width="1200" height="400"></canvas>
+    </div>
