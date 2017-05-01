@@ -63,7 +63,7 @@ class ReadSensorData(threading.Thread):
                 configurations = web.get_sensor_configuration()
 
                 for sensor in self.tellstick.get_sensors():
-                    if any(sensor.id == config.identity for config in configurations):
+                    if any(sensor.id == config.device_id for config in configurations):
                         has_temp = sensor.has_value(self.const.TELLSTICK_TEMPERATURE)
                         has_humidity = sensor.has_value(self.const.TELLSTICK_HUMIDITY)
 

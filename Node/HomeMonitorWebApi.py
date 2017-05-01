@@ -5,16 +5,18 @@ import datetime
 
 class SensorConfiguration(object):
     """Configuration object"""
-    identity = 0,
+    identity = 0
+    device_id = 0
     location = ""
 
-    def __init__(self, identity, location):
+    def __init__(self, identity, device_id, location):
         self.identity = identity
+        self.device_id = device_id
         self.location = location
 
     def get_configuration(self):
         """json string"""
-        return {'identity' : self.identity, 'location': self.location}
+        return {'identity' : self.identity, 'device_id': self.device_id, 'location': self.location}
 
     def set_location(self, location):
         """set location of sensor"""
