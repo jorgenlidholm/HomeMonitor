@@ -99,7 +99,7 @@ def save_sensor_readings(sensor_measurements):
     result = requests.post(query, data=data, headers=get_headers())
 
     if not result.ok:
-        print('Unable to store sensor measurments due to: ' + result.status_code + ' json:' + result.json + ' text:' +  result.text)
+        print('Unable to store sensor measurments due to: {} json: {} text: {}'.format(result.status_code, result.json, result.text))
 
 def get_authentication_token(key):
     """Creates security token."""
